@@ -11,6 +11,11 @@ class Santander:
         try:
             df_page2 = read_pdf(input_file, pages=2, area=[399.99, 0, 842, 595], multiple_tables=True, pandas_options={'header': None})
             df_page3 = read_pdf(input_file, pages=3, multiple_tables=True, pandas_options={'header': None})
+            df_page4 = read_pdf(input_file, pages=4, multiple_tables=True, pandas_options={'header': None})
+            if df_page4 is not None:
+                all_tables1 = df_page2 + df_page3 + df_page4
+                combined_df1 = pd.concat(all_tables1, ignore_index=True)
+                return combined_df1.to_csv(output_file, index=False)
             all_tables = df_page2 + df_page3
             combined_df = pd.concat(all_tables, ignore_index=True)
             return combined_df.to_csv(output_file, index=False)
@@ -35,6 +40,7 @@ class DataCleaning:
         df.loc[condition, 'Description'] = df.loc[condition, 'Money in']
         df.loc[condition, 'Money in'] = np.nan
         df['Money in'] = pd.to_numeric(df['Money in'], errors='coerce')
+       
         return df
 
         
@@ -47,10 +53,11 @@ if __name__ == '__main__':
     dc = DataCleaning()
 
 
-    table1 = sa.get_data_from_santander('file1.pdf', 'o1.csv')
-    table = pd.read_csv('o1.csv')
+    table1 = sa.get_data_from_santander('file1.pdf', 'o2.csv')
+    table = pd.read_csv('o2.csv')
     table2 = dc.clean_santander_data(table)
-    print(table2.head(60))
+    table2.to_csv('cleaned_data_test.csv', index=True)
+    print(table2.head(50))
     
 
     
