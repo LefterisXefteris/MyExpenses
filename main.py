@@ -2,9 +2,12 @@ from tabula import read_pdf
 import pandas as pd
 import re
 import numpy as np
+import boto3
+from io import StringIO
+import logging
 
 
-class Santander:
+class DataExtraction:
 
     
     def get_data_from_santander(self, input_file, output_file):
@@ -43,21 +46,62 @@ class DataCleaning:
        
         return df
 
-        
+class uploadDataToS3:
 
 
+    def __init__(self, aws_access_key_id, aws_secret_access_key, region_name):
+        self.s3_client = boto3.client(
+            's3',
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+            region_name=region_name
+        )
+    
+
+    def convert_dataframe_to_csv_and_upload(self, df, bucket_name, object_name):
+            # Create a buffer
+            csv_buffer = StringIO()
+            df.to_csv(csv_buffer, index=False)
+
+            # Reset the buffer position to the beginning
+            csv_buffer.seek(0)
+
+            # Upload the DataFrame from the buffer to S3
+            try:
+                self.s3_client.put_object(
+                    Bucket=bucket_name,
+                    Key=object_name,
+                    Body=csv_buffer.getvalue()
+                )
+                logging.info(f'Successfully uploaded {object_name} to bucket {bucket_name}.')
+            except Exception as e:
+                logging.error(f'Failed to upload {object_name} to bucket {bucket_name}: {e}')
 
 
 if __name__ == '__main__':
-    sa = Santander()
-    dc = DataCleaning()
+    logging.basicConfig(level=logging.INFO)
+
+    aws_access_key_id = 'AKIA435ULAGV54PPKQAC'
+    aws_secret_access_key = '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'
+    region_name = 'eu-west-1'
 
 
-    table1 = sa.get_data_from_santander('file1.pdf', 'o2.csv')
-    table = pd.read_csv('o2.csv')
-    table2 = dc.clean_santander_data(table)
-    table2.to_csv('cleaned_data_test.csv', index=True)
-    print(table2.head(50))
+    data_extractor = DataExtraction()
+    data_cleaner = DataCleaning()
+
+
+    raw_data_csv = 'output.csv'  
+    table1 = data_extractor.get_data_from_santander('file1.pdf', raw_data_csv)
+    table = pd.read_csv(raw_data_csv)
+    cleaned_data = data_cleaner.clean_santander_data(table)
+
+
+    uploader = uploadDataToS3(aws_access_key_id, aws_secret_access_key, region_name)
+    bucket_name = 'financialdatabucket'  
+    object_name = 'cleaned_data_test.csv'
+    uploader.convert_dataframe_to_csv_and_upload(cleaned_data, bucket_name, object_name)
+
+
     
 
     
