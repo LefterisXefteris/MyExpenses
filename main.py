@@ -78,28 +78,7 @@ class uploadDataToS3:
                 logging.error(f'Failed to upload {object_name} to bucket {bucket_name}: {e}')
 
 
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
 
-    aws_access_key_id = 'AKIA435ULAGV54PPKQAC'
-    aws_secret_access_key = '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'
-    region_name = 'eu-west-1'
-
-
-    data_extractor = DataExtraction()
-    data_cleaner = DataCleaning()
-
-
-    raw_data_csv = 'output.csv'  
-    table1 = data_extractor.get_data_from_santander('file1.pdf', raw_data_csv)
-    table = pd.read_csv(raw_data_csv)
-    cleaned_data = data_cleaner.clean_santander_data(table)
-
-
-    uploader = uploadDataToS3(aws_access_key_id, aws_secret_access_key, region_name)
-    bucket_name = 'financialdatabucket'  
-    object_name = 'cleaned_data_test.csv'
-    uploader.convert_dataframe_to_csv_and_upload(cleaned_data, bucket_name, object_name)
 
 
     
