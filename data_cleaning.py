@@ -12,16 +12,16 @@ class DataCleaning:
     
     def clean_santander_data(self, table):
         df = pd.DataFrame(table)
-        df = df[3:] 
+        df = df[1:] 
         df.columns = ['Date', 'Description', 'Money in', 'Money out', 'Balance']
-        df['Money in'] = df['Description']  
-        df['Description'] = df['Date'].str.extract(r'(\d+\w+ \w+ [A-Z]+[^\d]+)') 
-        df['Date'] = df['Date'].str.extract(r'(\d+\w+ \w+)')
-        rows_to_drop = [31] 
-        df.drop(index=rows_to_drop, inplace=True)
-        condition = df['Money in'].apply(lambda x: isinstance(x, str) and x.isdigit() == False)
-        df.loc[condition, 'Description'] = df.loc[condition, 'Money in']
-        df.loc[condition, 'Money in'] = np.nan
-        df['Money in'] = pd.to_numeric(df['Money in'], errors='coerce')
-       
+        df['Description'] = df['Description'].str.cat(df['Money out'], sep=' ')
+        df = df.dropna(thresh=2)
+        df = df.drop_duplicates()
+        df = df.fillna(0)
+        df = df.drop(index=28)
+        df['Money in'] = pd.to_numeric(df['Money in'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
+        df['Money out'] = pd.to_numeric(df['Money out'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
+        df['Description'] = df['Description'].astype(str)
         return df
+
+    
