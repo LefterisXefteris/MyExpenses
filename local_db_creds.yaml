@@ -1,0 +1,7 @@
+RDS_HOST: localhost
+RDS_PASSWORD: admin
+RDS_USER: lefterisgilmaz
+RDS_DATABASE: Transactions
+RDS_PORT: 5432
+
+

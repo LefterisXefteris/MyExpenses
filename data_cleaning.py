@@ -24,4 +24,9 @@ class DataCleaning:
         df['Description'] = df['Description'].astype(str)
         return df
 
+    def clean_santander_data_for_postgres(self, table):
+        df = pd.DataFrame(table)
+        df.drop(['Category'], axis=1, inplace=True)
+        df = df.rename(columns={'Predicted Category':'Category'})
+        return df
     

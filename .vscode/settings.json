@@ -1,0 +1,31 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "lefterisgilmaz",
+            "database": "lefterisgilmaz",
+            "username": "lefterisgilmaz"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "sales_data",
+            "database": "sales_data",
+            "username": "postgres"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "test_db",
+            "database": "Transactions",
+            "username": "lefterisgilmaz"
+        }
+    ]
+}
