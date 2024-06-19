@@ -6,7 +6,7 @@ from sqlalchemy import Engine, create_engine, engine_from_config, text, inspect
 
 class DatabaseUtills:
     def __init__(self):
-        pass
+        self.engine = None
 
     def read_db_creds(self, file):
         try:
@@ -27,9 +27,9 @@ class DatabaseUtills:
         DATABASE_TYPE = 'postgresql'
         DBAPI = 'psycopg2'
 
-        engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
+        self.engine = create_engine(f"{DATABASE_TYPE}+{DBAPI}://{USER}:{PASSWORD}@{HOST}:{PORT}/{DATABASE}")
 
-        return engine
+        return self.engine
     
     def list_db_tables(self, engine):
         try:
@@ -40,3 +40,6 @@ class DatabaseUtills:
                     print(row)
         except Exception as e:
             print("Failed to fecth tables.", e)
+
+
+    

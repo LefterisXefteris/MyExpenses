@@ -18,7 +18,6 @@ class DataCleaning:
         df = df.dropna(thresh=2)
         df = df.drop_duplicates()
         df = df.fillna(0)
-        df = df.drop(index=28)
         df['Money in'] = pd.to_numeric(df['Money in'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
         df['Money out'] = pd.to_numeric(df['Money out'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
         df['Description'] = df['Description'].astype(str)
@@ -28,5 +27,10 @@ class DataCleaning:
         df = pd.DataFrame(table)
         df.drop(['Category'], axis=1, inplace=True)
         df = df.rename(columns={'Predicted Category':'Category'})
+        df = df.reset_index(drop=True)
         return df
     
+    def concat_and_sort_df_bydate(self, *args):
+        concatenated_df = pd.concat(args, ignore_index=True)
+        sorted_df = concatenated_df.sort_values('Date')
+        return sorted_df

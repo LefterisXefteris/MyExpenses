@@ -29,6 +29,18 @@ if __name__ == '__main__':
     print("Cleaned Data:")
     print(cleaned_data.head())
 
+    raw1 = 'output1.csv'  
+    table2 = data_extractor.get_data_from_santander('file2.pdf', raw1)
+    table2 = pd.read_csv(raw1)
+    cleaned_data1 = data_cleaner.clean_santander_data(table2)
+    print("Cleaned Data:")
+    print(cleaned_data1.head(40))
+
+    contat_dataset = data_cleaner.concat_and_sort_df_bydate(cleaned_data, cleaned_data1)
+    print(contat_dataset.head(100))
+    contat_dataset.to_csv('output_file_merged.csv', index=False)
+
+
 
 
 
@@ -52,17 +64,21 @@ if __name__ == '__main__':
             return 'Health'
         elif any(term in description for term in ['electricity', 'water', 'gas', 'internet', 'phone', 'utility']):
             return 'Utilities'
+        elif any(term in description for term in ['lefteris']):
+            return 'Not affect in funds'
+        elif any(term in description for term in ['transfer']):
+            return 'Money Transfer'
         else:
             return 'Other'
 
-    cleaned_data['Category'] = cleaned_data['Description'].apply(categorize_transaction)
+    contat_dataset['Category'] = contat_dataset['Description'].apply(categorize_transaction)
     print("Data with Category:")
-    print(cleaned_data.head())
+    print(contat_dataset.head())
 
 
     vectorizer = TfidfVectorizer()
-    X = cleaned_data['Description'].astype(str)
-    y = cleaned_data['Category']
+    X = contat_dataset['Description'].astype(str)
+    y = contat_dataset['Category']
     X_transformed = vectorizer.fit_transform(X)
     X_train, X_test, y_train, y_test = train_test_split(X_transformed, y, test_size=0.2, random_state=42)
     model = LogisticRegression(class_weight='balanced')
@@ -74,18 +90,24 @@ if __name__ == '__main__':
     print("Classification Report:")
     print(classification_report(y_test, y_pred))
 
-    cleaned_data['Predicted Category'] = model.predict(vectorizer.transform(cleaned_data['Description'].astype(str)))
+    contat_dataset['Predicted Category'] = model.predict(vectorizer.transform(contat_dataset['Description'].astype(str)))
     print("Final Data with Predictions:")
-    print(cleaned_data.head(100))
-    cleaned_data.to_csv('ml_test_file.csv')
+    print(contat_dataset.head(100))
+    contat_dataset.to_csv('ml_test_file.csv')
 
 
-    database_ready = data_cleaner.clean_santander_data_for_postgres(cleaned_data)
+    database_ready = data_cleaner.clean_santander_data_for_postgres(contat_dataset)
     print(database_ready.head(30))
+
+
+
 
     creds_local = database_class.read_db_creds('local_db_creds.yaml')
     local_engine = database_class.init_db_engine(creds_local)
     local_tables = database_class.list_db_tables(local_engine)
+
+
+  
 
 
   
