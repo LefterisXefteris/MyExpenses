@@ -107,9 +107,12 @@ if __name__ == '__main__':
     local_tables = database_class.list_db_tables(local_engine)
 
 
-  
+    grouped = database_ready.groupby('Category')
+    dfs = {category: group for category, group in grouped}
+    print(dfs['Food'].head())
+    for d in dfs:
+        print(d)
 
-
-  
+    database_class.upload_to_db(dfs['Food'], 'dim_food', creds_local)
 
     
