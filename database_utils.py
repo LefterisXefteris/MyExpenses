@@ -45,10 +45,10 @@ class DatabaseUtills:
     def upload_to_db(self,df, table_name, engine):
         try:
             df = pd.DataFrame(df)
-            df.to_sql(table_name, engine, if_exists='replace')
-            print("Table uploaded to Sales Data")
+            df.to_sql(table_name, self.engine, if_exists='replace', index=False)
+            print("Table uploaded")
         except Exception as e:
-            print('Failed to upload aws table to lacal databse:', e)
+            print('Failed to upload pandas category dataframe to postgres sql table', e)
 
         
             

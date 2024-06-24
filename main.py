@@ -113,6 +113,6 @@ if __name__ == '__main__':
     for d in dfs:
         print(d)
 
-    database_class.upload_to_db(dfs['Food'], 'dim_food', creds_local)
+    database_class.upload_to_db(dfs['Food'], 'food', creds_local)
 
     

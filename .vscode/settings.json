@@ -26,6 +26,15 @@
             "name": "test_db",
             "database": "Transactions",
             "username": "lefterisgilmaz"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Transactions",
+            "database": "Transactions",
+            "username": "lefterisgilmaz"
         }
     ]
 }
