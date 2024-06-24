@@ -114,5 +114,14 @@ if __name__ == '__main__':
         print(d)
 
     database_class.upload_to_db(dfs['Food'], 'food', creds_local)
+    database_class.upload_to_db(dfs['Bills'], 'bills', creds_local)
+    database_class.upload_to_db(dfs['Groceries'], 'groceries', creds_local)
+    database_class.upload_to_db(dfs['Health'], 'health', creds_local)
+    database_class.upload_to_db(dfs['Other'], 'other', creds_local)
+    database_class.upload_to_db(dfs['Shopping'], 'shopping', creds_local)
+    database_class.upload_to_db(dfs['Transport'], 'transport', creds_local)
+
+    
+
 
     

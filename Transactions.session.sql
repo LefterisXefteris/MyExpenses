@@ -1,1 +1,1 @@
-select * from food;
+select * from bills;
