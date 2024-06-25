@@ -41,10 +41,6 @@ if __name__ == '__main__':
     contat_dataset.to_csv('output_file_merged.csv', index=False)
 
 
-
-
-
-
     def categorize_transaction(description):
         description = description.lower()
         
