@@ -72,6 +72,7 @@ if __name__ == '__main__':
     print(contat_dataset.head())
 
 
+    #using Logistic regration
     vectorizer = TfidfVectorizer()
     X = contat_dataset['Description'].astype(str)
     y = contat_dataset['Category']
@@ -116,7 +117,6 @@ if __name__ == '__main__':
     database_class.upload_to_db(dfs['Other'], 'other', creds_local)
     database_class.upload_to_db(dfs['Shopping'], 'shopping', creds_local)
     database_class.upload_to_db(dfs['Transport'], 'transport', creds_local)
-
     
 
 
