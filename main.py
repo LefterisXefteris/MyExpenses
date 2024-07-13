@@ -36,6 +36,8 @@ if __name__ == '__main__':
     print("Cleaned Data:")
     print(cleaned_data1.head(40))
 
+
+    """it is easier to concat the datasets, sort them and categorize them. then i will split them again. FOR NOW"""
     contat_dataset = data_cleaner.concat_and_sort_df_bydate(cleaned_data, cleaned_data1)
     print(contat_dataset.head(100))
     contat_dataset.to_csv('output_file_merged.csv', index=False)
@@ -44,7 +46,7 @@ if __name__ == '__main__':
     def categorize_transaction(description):
         description = description.lower()
         
-        if any(term in description for term in ['food', 'restaurant', 'cafe', 'burger', 'pizza', 'dining', 'eatery', 'bistro','starbucks', 'coffee', 'kfc']):
+        if any(term in description for term in ['food', 'restaurant', 'cafe', 'burger', 'pizza', 'dining', 'eatery', 'bistro','starbucks', 'coffee', 'kfc', 'CHICKEN']):
             return 'Food'
         elif any(term in description for term in ['bill', 'utilities', 'rent', 'subscription', 'membership', 'fee']):
             return 'Bills'
@@ -72,7 +74,7 @@ if __name__ == '__main__':
     print(contat_dataset.head())
 
 
-    #using Logistic regration
+    #using Logistic regration for better prediction
     vectorizer = TfidfVectorizer()
     X = contat_dataset['Description'].astype(str)
     y = contat_dataset['Category']
@@ -94,30 +96,39 @@ if __name__ == '__main__':
 
 
     database_ready = data_cleaner.clean_santander_data_for_postgres(contat_dataset)
-    print(database_ready.head(30))
+    print(database_ready.head(50))
 
-
+    
 
 
     creds_local = database_class.read_db_creds('local_db_creds.yaml')
     local_engine = database_class.init_db_engine(creds_local)
     local_tables = database_class.list_db_tables(local_engine)
 
+    data_for_categories_table = database_ready['Category'].copy()
+    print(data_for_categories_table.head(10))
+    database_class.upload_to_db(data_for_categories_table, "categories")
 
-    grouped = database_ready.groupby('Category')
-    dfs = {category: group for category, group in grouped}
-    print(dfs['Food'].head())
-    for d in dfs:
-        print(d)
 
-    database_class.upload_to_db(dfs['Food'], 'food', creds_local)
-    database_class.upload_to_db(dfs['Bills'], 'bills', creds_local)
-    database_class.upload_to_db(dfs['Groceries'], 'groceries', creds_local)
-    database_class.upload_to_db(dfs['Health'], 'health', creds_local)
-    database_class.upload_to_db(dfs['Other'], 'other', creds_local)
-    database_class.upload_to_db(dfs['Shopping'], 'shopping', creds_local)
-    database_class.upload_to_db(dfs['Transport'], 'transport', creds_local)
+    #Add machine learning trained dataaframe to transaction database
+
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Aggregate the data by Category
+    category_totals = database_ready.groupby('Category')['Money out'].sum().reset_index()
+
+  
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='Category', y='Money out', data=category_totals, palette='viridis')
+    plt.xlabel('Category')
+    plt.ylabel('Total Money Out')
+    plt.title('Total Money Out by Category')
+    plt.show()
+
+ 
+    
     
 
 
-    

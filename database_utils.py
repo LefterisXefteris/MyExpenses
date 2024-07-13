@@ -42,7 +42,7 @@ class DatabaseUtills:
             print("Failed to fecth tables.", e)
 
 
-    def upload_to_db(self,df, table_name, engine):
+    def upload_to_db(self,df, table_name):
         try:
             df = pd.DataFrame(df)
             df.to_sql(table_name, self.engine, if_exists='replace', index=False)

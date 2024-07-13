@@ -21,6 +21,7 @@ class DataCleaning:
         df['Money in'] = pd.to_numeric(df['Money in'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
         df['Money out'] = pd.to_numeric(df['Money out'].str.replace('£', '').str.replace(',', '').str.strip(), errors='coerce').fillna(0)
         df['Description'] = df['Description'].astype(str)
+        df.drop('Balance', axis=1, inplace=True)
         return df
 
     def clean_santander_data_for_postgres(self, table):
@@ -34,3 +35,4 @@ class DataCleaning:
         concatenated_df = pd.concat(args, ignore_index=True)
         sorted_df = concatenated_df.sort_values('Date')
         return sorted_df
+    

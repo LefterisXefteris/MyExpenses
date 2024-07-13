@@ -8,7 +8,8 @@ import logging
 
 class DataExtraction:
 
-    
+
+
     def get_data_from_santander(self, input_file, output_file):
         try:
             df_page = read_pdf(input_file, pages='all', multiple_tables=True, pandas_options={'header': None})
@@ -16,3 +17,5 @@ class DataExtraction:
             return combined_df.to_csv(output_file, index=False)
         except Exception as e:
             print(f"An error occurred: {e}")
+
+    
