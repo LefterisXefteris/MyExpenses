@@ -110,6 +110,8 @@ if __name__ == '__main__':
     data_for_categories_table = database_ready['Category']
     new_df = data_for_categories_table.unique()
     new_df1 = pd.DataFrame(new_df)
+    new_df1.rename(columns={0: 'categoryname'}, inplace=True)
+
     print(new_df1.head(30))
 
     database_class.upload_to_db(new_df1, 'categories')

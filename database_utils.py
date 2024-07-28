@@ -45,7 +45,7 @@ class DatabaseUtills:
     def upload_to_db(self,df, table_name):
         try:
             df = pd.DataFrame(df)
-            df.to_sql(table_name, self.engine, if_exists='replace', index=False)
+            df.to_sql(table_name, self.engine, if_exists='replace', index=True)
             print("Table uploaded")
         except Exception as e:
             print('Failed to upload pandas category dataframe to postgres sql table', e)
