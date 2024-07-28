@@ -1,1 +1,3 @@
-ALTER TABLE transactions RENAME COLUMN 'Category' TO 'categoryid';
+select * from categories;
+
+

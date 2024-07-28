@@ -3,7 +3,7 @@ import logging
 from data_cleaning import DataCleaning
 from data_extraction import DataExtraction
 from database_utils import DatabaseUtills
-from uploadDataToS3 import uploadDataToS3
+
 
 
 from sklearn.model_selection import train_test_split
@@ -94,6 +94,8 @@ if __name__ == '__main__':
     print(contat_dataset.head(100))
     contat_dataset.to_csv('ml_test_file.csv')
 
+    #pytorch
+    
 
     database_ready = data_cleaner.clean_santander_data_for_postgres(contat_dataset)
     print(database_ready.head(50))
@@ -112,23 +114,4 @@ if __name__ == '__main__':
 
     #Add machine learning trained dataaframe to transaction database
 
-
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-
-    # Aggregate the data by Category
-    category_totals = database_ready.groupby('Category')['Money out'].sum().reset_index()
-
-  
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x='Category', y='Money out', data=category_totals, palette='viridis')
-    plt.xlabel('Category')
-    plt.ylabel('Total Money Out')
-    plt.title('Total Money Out by Category')
-    plt.show()
-
- 
     
-    
-
-
