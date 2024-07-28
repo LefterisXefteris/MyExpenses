@@ -35,4 +35,3 @@ class DataCleaning:
         concatenated_df = pd.concat(args, ignore_index=True)
         sorted_df = concatenated_df.sort_values('Date')
         return sorted_df
-    

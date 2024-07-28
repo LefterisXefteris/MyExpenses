@@ -51,6 +51,4 @@ class DatabaseUtills:
             print('Failed to upload pandas category dataframe to postgres sql table', e)
 
         
-    # table name is the dataframe name bassically.
-    def upload_table(self, given_col, table_name):
-        pass
+   

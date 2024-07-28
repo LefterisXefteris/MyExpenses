@@ -107,10 +107,14 @@ if __name__ == '__main__':
     local_engine = database_class.init_db_engine(creds_local)
     local_tables = database_class.list_db_tables(local_engine)
 
-    data_for_categories_table = database_ready['Category'].copy()
-    print(data_for_categories_table.head(10))
-    database_class.upload_to_db(data_for_categories_table, "categories")
+    data_for_categories_table = database_ready['Category']
+    new_df = data_for_categories_table.unique()
+    new_df1 = pd.DataFrame(new_df)
+    print(new_df1.head(30))
 
+    database_class.upload_to_db(new_df1, 'categories')
+    
+    
 
     #Add machine learning trained dataaframe to transaction database
 
