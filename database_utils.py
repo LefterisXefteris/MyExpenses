@@ -1,7 +1,7 @@
 import psycopg2
 import sqlalchemy
 import yaml 
-from sqlalchemy import Engine, create_engine, engine_from_config, text, inspect
+from sqlalchemy import Engine, create_engine, engine_from_config, text, inspect, bindparam
 import pandas as pd
 
 class DatabaseUtills:
@@ -42,13 +42,29 @@ class DatabaseUtills:
             print("Failed to fecth tables.", e)
 
 
-    def upload_to_db(self,df, table_name):
+
+
+    def upload_to_db(self, df, table_name):
         try:
-            df = pd.DataFrame(df)
-            df.to_sql(table_name, self.engine, if_exists='replace', index=True)
+            df = pd.DataFrame(df).reset_index()  # Reset the index to include it as a column
+            data = df.to_dict(orient='records')
+            
+            with self.engine.connect() as conn:
+                for row in data:
+                    stmt = text(f"""
+                        INSERT INTO {table_name} (index, categoryname)
+                        VALUES (:index, :categoryname)
+                        ON CONFLICT (index) DO UPDATE SET
+                        categoryname = EXCLUDED.categoryname
+                    """)
+                    conn.execute(stmt, {'index': row['index'], 'categoryname': row['categoryname']})
+            
             print("Table uploaded")
         except Exception as e:
             print('Failed to upload pandas category dataframe to postgres sql table', e)
+
+
+
 
         
    
