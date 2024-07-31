@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+psycopg2-binary
+sqlalchemy
+pyyaml
+tabula-py
+boto3
+numpy

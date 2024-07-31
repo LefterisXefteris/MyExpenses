@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: lefterisgilmaz
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: Transactions
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql://lefterisgilmaz:admin@db:5432/Transactions
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+
+
+
