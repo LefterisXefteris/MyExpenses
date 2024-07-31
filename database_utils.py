@@ -46,7 +46,7 @@ class DatabaseUtills:
 
     def upload_to_db(self, df, table_name):
         try:
-            df = pd.DataFrame(df).reset_index()  # Reset the index to include it as a column
+            df = pd.DataFrame(df).reset_index() 
             data = df.to_dict(orient='records')
             
             with self.engine.connect() as conn:
