@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: Transactions
     ports:
-      - "5432:5432"
+      - "5433:5433"  # Changed to 5432 as it's the default PostgreSQL port
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -17,7 +17,9 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      SQLALCHEMY_DATABASE_URI: postgresql://lefterisgilmaz:admin@db:5432/Transactions
+      SQLALCHEMY_DATABASE_URI: postgresql://lefterisgilmaz:admin@host.docker.internal:5432/Transactions
+    extra_hosts:
+        - "host.machine:172.20.56.223"
     depends_on:
       - db
 
