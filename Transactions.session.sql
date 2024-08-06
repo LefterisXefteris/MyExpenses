@@ -1,2 +1,2 @@
 
-select * from transactions;
+select * from categories;

@@ -6,3 +6,5 @@ pyyaml
 tabula-py
 boto3
 numpy
+fastapi
+uvicorn

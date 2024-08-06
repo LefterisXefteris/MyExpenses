@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://lefterisgilmaz:admin@host.docker.internal:5432/Transactions
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

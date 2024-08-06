@@ -1,11 +1,11 @@
 FROM python:3.9-slim
 
-# Install Java
+
 RUN apt-get update && apt-get install -y default-jdk
 
 WORKDIR /app
 
-# Upgrade pip
+
 RUN pip install --no-cache-dir --upgrade pip
 
 COPY requirements.txt .

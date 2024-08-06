@@ -98,7 +98,7 @@ if __name__ == '__main__':
     print(contat_dataset.head(100))
     contat_dataset.to_csv('ml_test_file.csv')
 
-    #pytorch
+
     
 
     database_ready = data_cleaner.clean_santander_data_for_postgres(contat_dataset)
