@@ -6,10 +6,10 @@ app = Flask(__name__)
 
 def get_db_connection():
     conn = psycopg2.connect(
-        host=os.environ['localhost'],
-        database=os.environ['Transactions'],
-        user=os.environ['lefterisgilmaz'],
-        password=os.environ['admin']
+        host='host.docker.internal',
+        database='Transactions',
+        user='lefterisgilmaz',
+        password='admin'
     )
     return conn
 
@@ -24,4 +24,4 @@ def index():
     return str(data)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000) 
