@@ -120,7 +120,3 @@ if __name__ == '__main__':
     database_class.upload_to_db(new_df1, 'categories')
     
     
-
-    #Add machine learning trained dataaframe to transaction database
-
-    

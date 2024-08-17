@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  backend:
+    extends:
+      file: ./backend-services/docker-compose.yml
+      service: backend
+    networks:
+      - app_network
+    depends_on:
+      - rabbitmq
+
+  data-service:
+    extends:
+      file: ./data-service/docker-compose.yml
+      service: data-service
+    networks:
+      - app_network
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  pdf_data:
+    external: true
